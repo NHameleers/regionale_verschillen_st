@@ -62,12 +62,14 @@ cax1 = divider1.append_axes("bottom", size="5%", pad=0.1)
 
 ax1 = gdf.plot(column='verschil_M1',
                 ax=ax1,
-                cmap='cividis',
+                cmap='bwr',
                 legend=True,
                 cax=cax1,
                 legend_kwds={'label': f'Verschil {uitkomstmaat}\n met regio: {ref_regio}',
                             'orientation': "horizontal"},
-                norm=divnorm)
+                norm=divnorm,
+                edgecolor="black",
+                linewidth=.2)
 ax1.set_axis_off()
 # fig1.set_facecolor('black')
 
@@ -78,12 +80,14 @@ cax2 = divider2.append_axes("bottom", size="5%", pad=0.1)
 
 ax2 = gdf.plot(column='verschil_M6',
                 ax=ax2,
-                cmap='cividis',
+                cmap='bwr',
                 legend=True,
                 cax=cax2,
                 legend_kwds={'label': f'Verschil {uitkomstmaat}\nmet regio: {ref_regio}',
                             'orientation': "horizontal"},
-                norm=divnorm)
+                norm=divnorm,
+                edgecolor="black",
+                linewidth=.2)
 ax2.set_axis_off()
 # fig2.set_facecolor('black')
 
