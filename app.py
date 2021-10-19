@@ -16,6 +16,10 @@ newmapcolors = [cmaplist[i] for i in indices]
 binnedcmap = colors.ListedColormap(newmapcolors)
 
 
+beschrijving_uitkomstmaat = {'Gezondheid Algemeen': f'Percentage volwassenen (19 jaar en ouder) die een minder goede gezondheid ervaren',
+'Totale Zorgkosten': 'totale zorgkosten in basisverzekering'}
+
+
 
 # ggd_topo = alt.topo_feature('ggd_regios.geojson', 'features')
 
@@ -34,7 +38,7 @@ df = pd.read_csv('simulated_ggd_regio_data.csv')
 # 'DF'
 # st.write(df.head())
 
-
+'# Regionale gezondheidsverschillen'
 
 ### USER INPUT
 uitkomstmaat = st.selectbox('Selecteer Uitkomstmaat:', df.uitkomstmaat.unique())
@@ -55,10 +59,12 @@ gdf = gdf_raw.merge(verschil_M1, on='ggd_regio', how='left').merge(verschil_M6, 
 # st.write(gdf)
 
 
+if 'kosten' not in uitkomstmaat.lower():
+    titeltekst = f"### {beschrijving_uitkomstmaat[uitkomstmaat]} per regio, ten opzichte van {ref_regio}."
+elif 'kosten' in uitkomstmaat.lower():
+    titeltekst = f"### Marginale {uitkomstmaat} in euro's per regio, ten opzichte van {ref_regio}."
 
-
-
-
+st.write(titeltekst)
 
 
 ### PLOTTING
@@ -107,10 +113,29 @@ ax2.set_axis_off()
 # '## Links zonder correctie, rechts na (met?) correctie voor demografie, SES, eenzaamheid, leefstijl, ervaren gezondheid etc (TODO)'
 
 col1, col2 = st.columns(2)
-col1.subheader(f'Verschillen in {uitkomstmaat} zonder correctie')
+col1.write(f'Voor correctie')
 col1.pyplot(fig1)
-col2.subheader(f'Verschillen in {uitkomstmaat} na correctie')
+col2.write(f'Na correctie')
 col2.pyplot(fig2)
+
+
+f'''### Leeswijzer
+
+De kaarten tonen de percentages (**TODO**: Dynamisch maken voor kosten) van de volwassenen (19 jaar en ouder) die {beschrijving_uitkomstmaat[uitkomstmaat]} hebben per regio. Hoe hoger het percentage, hoe meer volwassen {beschrijving_uitkomstmaat[uitkomstmaat]} hebben, hoe roder de regio kleurt. Grijze regio’s verschillen niet met de gekozen referentieregio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld heeft **TODO**% van de Nederlanders {beschrijving_uitkomstmaat[uitkomstmaat]} voor correctie en **TODO**% na correctie.
+'''
+
+
+
+
+'''### Bronverantwoording
+(link naar pagina met uitleg en categorisering, bron etc per variabele en uitkomstmaat)
+'''
+
+''
+''
+''
+
+
 
 '# DISCLAIMER DISCLAIMER!!!'
 '# DEZE DATA ZIJN GESIMULEERD!'
