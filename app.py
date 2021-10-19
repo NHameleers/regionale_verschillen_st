@@ -6,6 +6,17 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+
+
+cmap = plt.cm.coolwarm  # define the colormap
+# extract all colors from the colormap
+cmaplist = [cmap(i) for i in range(cmap.N)]
+indices = [int(i) for i in np.linspace(0, len(cmaplist)-1, 7)]
+newmapcolors = [cmaplist[i] for i in indices]
+binnedcmap = colors.ListedColormap(newmapcolors)
+
+
+
 # ggd_topo = alt.topo_feature('ggd_regios.geojson', 'features')
 
 
@@ -62,7 +73,7 @@ cax1 = divider1.append_axes("bottom", size="5%", pad=0.1)
 
 ax1 = gdf.plot(column='verschil_M1',
                 ax=ax1,
-                cmap='bwr',
+                cmap=binnedcmap,
                 legend=True,
                 cax=cax1,
                 legend_kwds={'label': f'Verschil {uitkomstmaat}\n met regio: {ref_regio}',
@@ -80,7 +91,7 @@ cax2 = divider2.append_axes("bottom", size="5%", pad=0.1)
 
 ax2 = gdf.plot(column='verschil_M6',
                 ax=ax2,
-                cmap='bwr',
+                cmap=binnedcmap,
                 legend=True,
                 cax=cax2,
                 legend_kwds={'label': f'Verschil {uitkomstmaat}\nmet regio: {ref_regio}',
