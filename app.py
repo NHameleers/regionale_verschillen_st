@@ -29,7 +29,7 @@ beschrijving_uitkomstmaat = {'Gezondheid Algemeen': f'Percentage volwassenen (19
 
 
 ### GEO DATA
-gdf_raw = (geopandas.read_file("ggd_regios2.shp").rename(columns={'statnaam': 'ggd_regio'}))
+gdf_raw = (geopandas.read_file("ggd_regios.shp").rename(columns={'statnaam': 'ggd_regio'}))
 
 # 'GDF raw'
 # st.write(gdf_raw)
@@ -53,10 +53,10 @@ ref_regio = st.selectbox('Selecteer referentie GGD regio:', df.ggd_regio.unique(
 
 
 ### DATA FOR PLOTTING PREPARATION BASED ON INPUTS
-verschil_M1 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 'M1'), ['ggd_regio', 'verschil']].copy()
+verschil_M1 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 1), ['ggd_regio', 'verschil']].copy()
 verschil_M1 = verschil_M1.rename(columns={'verschil': 'verschil_M1'})
 
-verschil_M6 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 'M6'), ['ggd_regio', 'verschil']].copy()
+verschil_M6 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 6), ['ggd_regio', 'verschil']].copy()
 verschil_M6 = verschil_M6.rename(columns={'verschil': 'verschil_M6'})
 
 gdf = gdf_raw.merge(verschil_M1, on='ggd_regio', how='left').merge(verschil_M6, on='ggd_regio', how='left')
