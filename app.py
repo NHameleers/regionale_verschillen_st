@@ -135,12 +135,3 @@ col2.pyplot(fig2)
 '''### Bronverantwoording
 (Uitvouwding naar pagina met uitleg en categorisering, bron etc per variabele en uitkomstmaat)
 '''
-
-''
-''
-''
-
-
-
-'# DISCLAIMER DISCLAIMER!!!'
-'# DEZE DATA ZIJN GESIMULEERD!'
