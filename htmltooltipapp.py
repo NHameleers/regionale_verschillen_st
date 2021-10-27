@@ -138,3 +138,116 @@ col2.pyplot(fig2)
 
 
 
+
+############# A MESS, BUT A MESS WITH TOOLTIPS!!!!!!!!!
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import mpld3
+from mpld3 import plugins
+
+# Define some CSS to control our custom labels
+css = """
+table
+{
+  border-collapse: collapse;
+}
+th
+{
+  color: #ffffff;
+  background-color: #000000;
+}
+td
+{
+  background-color: #cccccc;
+}
+table, th, td
+{
+  font-family:Arial, Helvetica, sans-serif;
+  border: 1px solid black;
+  text-align: right;
+}
+"""
+
+fig, ax = plt.subplots()
+ax.grid(True, alpha=0.3)
+
+N = 50
+df = pd.DataFrame(index=range(N))
+df['x'] = np.random.randn(N)
+df['y'] = np.random.randn(N)
+df['z'] = np.random.randn(N)
+
+# st.write(gdf.iloc[[0], :].T)
+
+
+
+# st.write(labels)
+
+labels = []
+for i in range(N):
+    label = df.iloc[[i], :].T
+    label.columns = ['Row {0}'.format(i)]
+    # .to_html() is unicode; so make leading 'u' go away with str()
+    labels.append(str(label.to_html()))
+
+
+points = ax.plot(df.x, df.y, 'o', color='b',
+                 mec='k', ms=15, mew=1, alpha=.6)
+
+st.write(ax2)
+
+
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_title('HTML tooltips', size=20)
+
+tooltip = plugins.PointHTMLTooltip(points[0], labels,
+                                   voffset=10, hoffset=10, css=css)
+plugins.connect(fig, tooltip)
+
+# mpld3.show()
+
+import streamlit.components.v1 as components
+
+def mpld3_static(fig: plt.Figure, height=500, width=700, **mpld3_kwargs):
+    return components.html(mpld3.fig_to_html(fig, **mpld3_kwargs), height=height, width=width)
+
+mpld3_static(fig)
+
+
+
+
+
+
+labels = []
+labeldf = gdf[['ggd_regio', 'verschil_M1']].copy()
+for i in range(gdf.shape[0]):
+  label = labeldf.iloc[[i], :].T
+  label.columns = [f'Row {i}']
+  # .to_html() is unicode; so make leading 'u' go away with str()
+  labels.append(str(label.to_html()))
+
+# # alternatively
+# labels = [f'verschil {v}' for v in gdf['verschil_M1']]
+
+tooltip = plugins.PointHTMLTooltip(ax1, labels,
+                                   voffset=10, hoffset=10, css=css)
+plugins.connect(fig1, tooltip)
+
+mpld3_static(fig1)
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+from mpld3 import fig_to_html, plugins
+fig, ax = plt.subplots()
+points = ax.plot(range(10), 'o')
+plugins.connect(fig, plugins.MousePosition())
+# fig_to_html(fig)
+mpld3_static(fig)

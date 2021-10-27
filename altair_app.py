@@ -1,9 +1,11 @@
+import altair as alt
 import geopandas
 import matplotlib.pyplot as plt
 from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import pandas as pd
+import gpdvega
 import streamlit as st
 st.set_page_config(layout="wide")
 
@@ -135,3 +137,60 @@ col2.pyplot(fig2)
 '''### Bronverantwoording
 (Uitvouwding naar pagina met uitleg en categorisering, bron etc per variabele en uitkomstmaat)
 '''
+
+
+# m1 = alt.Chart(gdf).mark_geoshape().encode(
+#     color='verschil_M1',
+#     tooltip='ggd_regio'
+# )
+# # st.altair_chart(m1)
+
+
+# world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+# data  = alt.InlineData(values = world[world.continent=='Africa'].__geo_interface__, #geopandas to geojson
+#                        # root object type is "FeatureCollection" but we need its features
+#                        format = alt.DataFormat(property='features',type='json')) 
+# mtest = alt.Chart(data).mark_geoshape(
+# ).encode( 
+#     color='properties.pop_est:Q', # GeoDataFrame fields are accessible through a "properties" object 
+#     tooltip=['properties.name:N','properties.pop_est:Q']
+# ).properties( 
+#     width=500,
+#     height=300
+# )
+# st.write(data)
+# mtest = alt.Chart(data).mark_geoshape(
+# ).encode( 
+#     color='properties.verschil_M1:Q', # GeoDataFrame fields are accessible through a "properties" object 
+#     tooltip=['properties.ggd_regio:N','properties.verschil_M1:Q']
+# ).properties( 
+#     width=500,
+#     height=300
+# )
+
+# st.altair_chart(mtest)
+
+
+
+# https://github.com/streamlit/streamlit/issues/1002
+
+ggd_regios = alt.topo_feature(
+        "https://gitlab.maastrichtuniversity.nl/Niels.Hameleers/gezondheidsverschillen2/-/raw/main/ggd_regios.json",
+        "ggd_regios",
+    )
+m1 = (
+    alt.Chart(ggd_regios)
+    .mark_geoshape(stroke="white", strokeWidth=2)
+    .encode(
+        color="verschil_M1:Q",
+        tooltip=[
+            alt.Tooltip("properties.ggd_regio:O", title="GGD regio"),
+            alt.Tooltip("verschil_M1:Q", title="Indicator value"),
+        ],
+    )
+    .transform_lookup(
+        lookup="properties.ggd_regio",
+        from_=alt.LookupData(verschil_M1, "ggd_regio", ["verschil_M1"]),
+    )
+)
+st.altair_chart(m1)
