@@ -196,3 +196,12 @@ m1 = (
     )
 )
 st.altair_chart(m1)
+
+
+url = "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/us-states/MI-26-michigan-counties.json"
+
+source = alt.topo_feature(url, "cb_2015_michigan_county_20m")
+
+st.altair_chart(alt.Chart(source).mark_geoshape().encode(
+    tooltip='properties.NAME:N'
+))
