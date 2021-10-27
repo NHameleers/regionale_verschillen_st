@@ -174,8 +174,10 @@ col2.pyplot(fig2)
 
 # https://github.com/streamlit/streamlit/issues/1002
 
+
+verschil_M1 = verschil_M1.rename(columns={'ggd_regio': 'statnaam'})
 ggd_regios = alt.topo_feature(
-        "https://gitlab.maastrichtuniversity.nl/Niels.Hameleers/gezondheidsverschillen2/-/raw/main/ggd_regios.json",
+        "https://raw.githubusercontent.com/NHameleers/regionale_verschillen_st/main/ggd_regios_topo.json",
         "ggd_regios",
     )
 m1 = (
@@ -184,13 +186,13 @@ m1 = (
     .encode(
         color="verschil_M1:Q",
         tooltip=[
-            alt.Tooltip("properties.ggd_regio:O", title="GGD regio"),
+            alt.Tooltip("properties.statnaam:O", title="GGD regio"),
             alt.Tooltip("verschil_M1:Q", title="Indicator value"),
         ],
     )
     .transform_lookup(
-        lookup="properties.ggd_regio",
-        from_=alt.LookupData(verschil_M1, "ggd_regio", ["verschil_M1"]),
+        lookup="properties.statnaam",
+        from_=alt.LookupData(verschil_M1, "statnaam", ["verschil_M1"]),
     )
 )
 st.altair_chart(m1)
