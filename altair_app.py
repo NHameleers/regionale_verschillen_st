@@ -178,7 +178,7 @@ col2.pyplot(fig2)
 verschil_M1 = verschil_M1.rename(columns={'ggd_regio': 'statnaam'})
 ggd_regios = alt.topo_feature(
         "https://raw.githubusercontent.com/NHameleers/regionale_verschillen_st/main/ggd_regios_topo.json",
-        "id",
+        "ggd_regios",
     )
 m1 = (
     alt.Chart(ggd_regios)
