@@ -156,7 +156,7 @@ out2 = (m1 | m6).configure_legend(
     gradientLength=800,
     gradientThickness=30,
     padding=10,
-    titleLimit=1000,
+    titleLimit=1100,
     titleFontSize=16
 ) 
 # https://altair-viz.github.io/user_guide/generated/toplevel/altair.Chart.html#altair.Chart.configure_legend
