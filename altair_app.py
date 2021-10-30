@@ -18,20 +18,20 @@ binnedcmap = colors.ListedColormap(newmapcolors)
 
 
 beschrijving_uitkomstmaat = {'Gezondheid Algemeen': f'Percentage volwassenen (19 jaar en ouder) die een minder goede gezondheid ervaren',
-'TotaleZorgkosten': 'totale zorgkosten in basisverzekering',
+'TotaleZorgkosten': 'totale zorgkosten in de basisverzekering',
 'nopzvwkhuisartsconsult': 'Kosten huisarts consult basisverzekering',
 'GGZkosten': 'Kosten GGZ basisverzekering',
 'zvwkziekenhuis': 'Kosten medisch-specialistische zorg basisverzekering',
 'zvwkfarmacie': 'Kosten farmacie basisverzekering'}
 
-uitkomstmaat_map = {'Alg_gez_0goed_1slecht': 'Minder goed ervaren gezondheid',
-'Chron_ziekte_0_nee': 'Eén of meer chronische ziekten',
-'Hoog_Risico_Depr': 'Hoog risico op angststoornis of depressie',
-'TotaleZorgkosten': 'Totale zorgkosten basisverzekering',
-'nopzvwkhuisartsconsult': 'Huisarts Consult kosten',
-'GGZkosten': 'Geestelijke Gezondheidszorg kosten',
-'zvwkfarmacie': 'Farmacie kosten',
-'zvwkziekenhuis': 'Medisch Specialistische Zorg kosten'}
+uitkomstmaat_map = {'Alg_gez_0goed_1slecht': 'minder goed ervaren gezondheid',
+'Chron_ziekte_0_nee': 'één of meer chronische ziekten',
+'Hoog_Risico_Depr': 'hoog risico op angststoornis of depressie',
+'TotaleZorgkosten': 'totale zorgkosten in de basisverzekering',
+'nopzvwkhuisartsconsult': 'huisarts consult kosten',
+'GGZkosten': 'geestelijke gezondheidszorg kosten',
+'zvwkfarmacie': 'farmacie kosten',
+'zvwkziekenhuis': 'medisch specialistische zorg kosten'}
 
 # ggd_topo = alt.topo_feature('ggd_regios.geojson', 'features')
 
@@ -57,8 +57,13 @@ df['uitkomstmaat'] = df['uitkomstmaat'].replace(uitkomstmaat_map)
 
 
 ### USER INPUT
-uitkomstmaat = st.sidebar.selectbox('Selecteer Uitkomstmaat:', df.uitkomstmaat.unique())
-ref_regio = st.sidebar.selectbox('Selecteer referentie GGD regio:', df.ggd_regio.unique())
+uitkomstmaat = st.sidebar.selectbox('Selecteer de gewenste uitkomstmaat:', df.uitkomstmaat.unique())
+ref_regio = st.sidebar.selectbox('Selecteer de referentie regio:', df.ggd_regio.unique())
+
+# save nl gemiddelde voor leeswijzer
+nl_df = pd.read_csv('NL_gemiddelden.csv')
+nl_df['uitkomstmaat'] = nl_df['uitkomstmaat'].replace(uitkomstmaat_map)
+nl_gemiddelde = nl_df.loc[nl_df.uitkomstmaat == uitkomstmaat, 'gemiddelde'].values[0]
 
 
 if ('kosten' in uitkomstmaat) or ('zvwk' in uitkomstmaat):
@@ -83,7 +88,7 @@ gdf = gdf_raw.merge(verschil_M1, on='ggd_regio', how='left').merge(verschil_M6, 
 # st.write(gdf)
 
 
-titeltekst = f"""## {uitkomstmaat} per GGD regio, ten opzichte van {ref_regio}."""
+titeltekst = f"""## {uitkomstmaat.capitalize()} per GGD regio, ten opzichte van {ref_regio}."""
 
 st.write(titeltekst)
 
@@ -119,7 +124,7 @@ m1 = (
     .mark_geoshape(stroke="white", strokeWidth=1)
     .encode(
         color=alt.condition(alt.datum.verschil_M1 != 0,
-        alt.Color("verschil_M1:Q", scale=alt.Scale(scheme=colorscheme, domain=full_domain_reversed), legend=alt.Legend(title=legend_title)),
+        alt.Color("verschil_M1:Q", scale=alt.Scale(scheme=colorscheme, domain=full_domain_reversed), legend=alt.Legend(title=legend_title, orient='bottom')),
         alt.value('lightgray'),
         legend=None),
         tooltip=[
@@ -132,8 +137,8 @@ m1 = (
         from_=alt.LookupData(verschil_M1, "statnaam", ["verschil_M1"]),
     )
     .properties(
-        width=500,
-        height=550
+        width=400,
+        height=440
     )
 )
 # st.altair_chart(m1)
@@ -144,7 +149,7 @@ m6 = (
     .mark_geoshape(stroke="white", strokeWidth=1)
     .encode(
         color=alt.condition(alt.datum.verschil_M6 != 0,
-        alt.Color("verschil_M6:Q", scale=alt.Scale(scheme=colorscheme, domain=full_domain_reversed), legend=alt.Legend(title=legend_title)),
+        alt.Color("verschil_M6:Q", scale=alt.Scale(scheme=colorscheme, domain=full_domain_reversed), legend=alt.Legend(title=legend_title, orient='bottom')),
         alt.value('lightgray'),
         legend=None),
         tooltip=[
@@ -157,17 +162,28 @@ m6 = (
         from_=alt.LookupData(verschil_M6, "statnaam", ["verschil_M6", "ref_regio"]),
     )
     .properties(
-        width=500,
-        height=550
+        width=400,
+        height=440
     )
 )
 # st.altair_chart(m6)
 
-out2 = m1 | m6
+out2 = (m1 | m6).configure_legend(
+    gradientLength=800,
+    gradientThickness=30,
+    padding=10,
+    titleLimit=400,
+    titleFontSize=16
+) 
+# https://altair-viz.github.io/user_guide/generated/toplevel/altair.Chart.html#altair.Chart.configure_legend
+
 st.altair_chart(out2, use_container_width=True)
 
-st.write(f'''### Leeswijzer
-De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in percentage van de volwassenen (19 jaar en ouder) die {uitkomstmaat} hebben. Wanneer meer volwassenen in een GGD regio {uitkomstmaat} hebben dan in {ref_regio}, dan kleurt de regio rood. Hebben minder volwassenen {uitkomstmaat}, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio’s verschillen niet met de gekozen referentieregio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld heeft XX% van de Nederlanders {uitkomstmaat}.
+if 'kosten' in uitkomstmaat.lower():
+    f'''De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in gemiddelde {uitkomstmaat} per volwassene (19 jaar en ouder). Wanneer de gemiddelde {uitkomstmaat} per volwassene in een GGD regio hoger zijn dan in de referentie regio ({ref_regio}), dan kleurt de regio rood. Zijn de gemiddelde {uitkomstmaat} lager, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio's verschillen niet met de gekozen referentie regio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld zijn de {uitkomstmaat} in Nederland €{nl_gemiddelde:.00f} per volwassene.'''
+else:
+    st.write(f'''### Leeswijzer
+De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in percentage van de volwassenen (19 jaar en ouder) die {uitkomstmaat} hebben. Wanneer meer volwassenen in een GGD regio {uitkomstmaat} hebben dan in {ref_regio}, dan kleurt de regio rood. Hebben minder volwassenen {uitkomstmaat}, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio’s verschillen niet met de gekozen referentieregio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld heeft {nl_gemiddelde:.1f}% van de Nederlanders {uitkomstmaat}.
 ''')
 
 # col1, col2 = st.columns((2, 1))
@@ -179,7 +195,7 @@ De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({re
 
 show_bv = st.sidebar.checkbox('Toon bronverantwoording')
 if show_bv:
-    st.sidebar.write('(Uitvouwding naar pagina met uitleg en categorisering, bron etc per variabele en uitkomstmaat)')
+    st.sidebar.write('(Hier komt dan een stuk met uitleg en categorisering, bron etc per variabele en uitkomstmaat)')
 
 
 
