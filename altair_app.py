@@ -173,13 +173,14 @@ st.altair_chart(out2, use_container_width=True)
 ######################## LEESWIJZER ##########################
 leeswijzer = ''
 if 'kosten' in uitkomstmaat.lower():
-    leeswijzer = f'''De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in gemiddelde {uitkomstmaat} per volwassene (19 jaar en ouder). Wanneer de gemiddelde {uitkomstmaat} per volwassene in een GGD regio hoger zijn dan in de referentie regio ({ref_regio}), dan kleurt de regio rood. Zijn de gemiddelde {uitkomstmaat} lager, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio's verschillen niet met de gekozen referentie regio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld zijn de {uitkomstmaat} in Nederland €{nl_gemiddelde:.00f} per volwassene.'''
+    leeswijzer = f'''### Leeswijzer
+    De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in gemiddelde {uitkomstmaat} per volwassene (19 jaar en ouder). Wanneer de gemiddelde {uitkomstmaat} per volwassene in een GGD regio hoger zijn dan in de referentie regio ({ref_regio}), dan kleurt de regio rood. Zijn de gemiddelde {uitkomstmaat} lager, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio's verschillen niet met de gekozen referentie regio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld zijn de {uitkomstmaat} in Nederland €{nl_gemiddelde:.00f} per volwassene.'''
 else:
     leeswijzer = f'''### Leeswijzer
 De kaarten tonen per GGD regio het verschil met de gekozen referentie regio ({ref_regio}) in percentage van de volwassenen (19 jaar en ouder) die {uitkomstmaat} hebben. Wanneer meer volwassenen in een GGD regio {uitkomstmaat} hebben dan in {ref_regio}, dan kleurt de regio rood. Hebben minder volwassenen {uitkomstmaat}, dan kleurt de regio blauw. Hoe groter het verschil, hoe dieper de kleur. Grijze regio’s verschillen niet met de gekozen referentieregio {ref_regio}. De eerste kaart geeft de cijfers weer zonder enige correctie. De cijfers in het tweede kaartje zijn gecorrigeerd voor leeftijd, geslacht, burgerlijke staat, migratieachtergrond, huishoudinkomen, opleidingsniveau, moeite met rondkomen, BMI, roken, alcoholconsumptie, voldoende beweging, eenzaamheid en zelfregie. Gemiddeld heeft {nl_gemiddelde:.1f}% van de Nederlanders {uitkomstmaat}.
 '''
 
-st.write(leeswijzer)
+# st.write(leeswijzer)
 
 lw_sidebar = st.sidebar.checkbox('Toon leeswijzer hier')
 if lw_sidebar:
