@@ -1,13 +1,13 @@
 class teksten:
 
 
-    introductie = '''Deze regiovergelijker laat zien hoe regio’s van elkaar verschillen als het gaat om gezondheid en zorgkosten. We laten daarnaast zien in hoeverre deze verschillen zijn toe te schrijven aan persoonlijke kenmerken van inwoners per GGD-regio. Met deze kenmerken kijken we zowel naar demografie (leeftijd, geslacht, burgerlijke staat, migratieachtergrond), als sociaaleconomische status (opleidingsniveau, inkomen, moeite met rondkomen), leefstijl (body mass index (BMI), roken, alcoholconsumptie, bewegen) eenzaamheid en zelfregie. Van al deze kenmerken is bekend dat zij gezondheid kunnen beïnvloeden. Wat dragen zij **samen** dan bij aan het verklaren van regionale verschillen in gezondheid? 
+    introductie = '''Deze Regiovergelijker laat zien hoe regio’s van elkaar verschillen als het gaat om gezondheid en zorgkosten. We laten daarnaast zien in hoeverre deze verschillen zijn toe te schrijven aan persoonlijke kenmerken van inwoners per GGD-regio. Met deze kenmerken kijken we zowel naar demografie (leeftijd, geslacht, burgerlijke staat, migratieachtergrond), als sociaaleconomische status (opleidingsniveau, inkomen, moeite met rondkomen), leefstijl (body mass index (BMI), roken, alcoholconsumptie, bewegen) eenzaamheid en zelfregie. Van al deze kenmerken is bekend dat zij gezondheid kunnen beïnvloeden. Wat dragen zij **samen** dan bij aan het verklaren van regionale verschillen in gezondheid? 
 
 Om deze vraag te kunnen beantwoorden is gebruik gemaakt van gecombineerde, geanonimiseerde gegevens van meer dan 300,000 Nederlanders van 19 jaar en ouder die representatief zijn voor de Nederlandse bevolking. 
 
-In het TSG-special ‘NAAM’ wordt in twee onderzoeken gekeken naar de verklaring van regionale verschillen in gezondheid en zorgkosten ten opzichte van de regio Zuid-Limburg zonder en met correctie voor bovengenoemde persoonlijke kernmerken. In deze regiovergelijker kun je zelf kiezen welke regio je als referentie wilt gebruiken.
+In het Tijdschrift voor Gezondheidswetenschappen (TSG) themanummer Sociaaleconomische Gezondheidsverschillen wordt in twee onderzoeken gekeken naar de verklaring van regionale verschillen in gezondheid en zorgkosten ten opzichte van de regio Zuid-Limburg zonder en met correctie voor bovengenoemde persoonlijke kernmerken. In deze Regiovergelijker kun je zelf kiezen welke regio je als referentie wilt gebruiken.
 
-Voor een korte uitleg van ons onderzoek en het gebruik van de tool klik HIER [link filmpje]. De wetenschappelijke artikelen kun je hier downloaden over gezondheid[link artikel] en zorgkosten[link artikel].
+Voor een korte uitleg van ons onderzoek en het gebruik van de Regiovergelijker klik HIER [link filmpje]. De wetenschappelijke artikelen kun je hier downloaden over gezondheid[link artikel] en zorgkosten[link artikel].
 
 '''
 
@@ -17,7 +17,7 @@ Voor een korte uitleg van ons onderzoek en het gebruik van de tool klik HIER [li
     def prep_leeswijzer(uitkomstmaat, gemiddelde):
         pass
 
-    dankwoord = '''Deze regiovergelijker is mogelijk gemaakt door de [Academische Werkplaats Publieke Gezondheid](https://www.academischewerkplaatslimburg.nl/) en de [Academische Werkplaats Duurzame Zorg](https://www.maastrichtuniversity.nl/nl/onderzoek/academische-werkplaats-duurzame-zorg-limburg).
+    dankwoord = '''Deze Regiovergelijker is mogelijk gemaakt door de [Academische Werkplaats Publieke Gezondheid](https://www.academischewerkplaatslimburg.nl/) en de [Academische Werkplaats Duurzame Zorg](https://www.maastrichtuniversity.nl/nl/onderzoek/academische-werkplaats-duurzame-zorg-limburg).
 Met dank aan de GGD-en, CBS en Vektis voor het beschikbaar stellen van de geanonimiseerde Microdatabestanden in de CBS Remote Access omgeving.'''
 
 
