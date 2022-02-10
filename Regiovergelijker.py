@@ -105,7 +105,7 @@ if radio_nav == 'Home':
     st.sidebar.markdown("***")
 
     st.sidebar.markdown('''Tenzij anders vermeld is alles in dit werk gelicenceerd onder een [CC-BY 4.0-licentie](https://creativecommons.org/licenses/by/4.0/deed.nl). Wanneer u gebruik wilt maken van dit werk, hanteer dan de volgende methode van naamsvermelding: 
-    *"TODO allenamen (2021). Regiovergelijker gezondheid en zorgkosten. https://regiovergelijker.maastrichtuniversity.nl, Maastricht University 1 december 2021."*''')
+    *"Hameleers N, Meisters R, Putrik P, Bosma H, Ruwaard D, Jansen M, Westra D (2021). Regiovergelijker gezondheid en zorgkosten. https://regiovergelijker.maastrichtuniversity.nl, Maastricht University 1 december 2021."*''')
 
     f"""## {uitkomstmaat.capitalize()} per GGD regio, ten opzichte van {ref_regio}."""
 
