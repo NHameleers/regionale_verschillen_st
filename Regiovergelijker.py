@@ -39,7 +39,6 @@ inkortdict = {'Veiligheids- en Gezondheidsregio Gelderland-Midden': 'Gelderland-
 'Dienst Gezondheid & Jeugd ZHZ': 'Zuid-Holland Zuid'}
 df.ggd_regio = df.ggd_regio.replace(inkortdict).str.replace('GGD ', '').str.strip()
 df.referentie_regio = df.referentie_regio.replace(inkortdict).str.replace('GGD ', '').str.strip()
-st.write(df)
 
 ### NL GEMIDDELDEN VAN UITKOMSTMATEN
 nl_df = pd.read_csv('NL_gemiddelden.csv')
