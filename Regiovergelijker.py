@@ -128,12 +128,15 @@ if radio_nav == 'Home':
         df['verschil'] = (df['verschil'] * 100).round(1)
         unit = 'procentpunt'
 
+
+    df['is_referentie_regio'] = df.ggd_regio == df.referentie_regio
+
     # selectie uit df om te plotten
-    verschil_M1 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 1), ['ggd_regio', 'verschil']].copy()
+    verschil_M1 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 1), ['ggd_regio', 'verschil', 'is_referentie_regio']].copy()
     verschil_M1 = verschil_M1.rename(columns={'verschil': 'verschil_M1',
     'ggd_regio': 'statnaam'})
 
-    verschil_M6 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 6), ['ggd_regio', 'verschil']].copy()
+    verschil_M6 = df.loc[(df.uitkomstmaat == uitkomstmaat) & (df.referentie_regio == ref_regio) & (df.model == 6), ['ggd_regio', 'verschil', 'is_referentie_regio']].copy()
     verschil_M6 = verschil_M6.rename(columns={'verschil': 'verschil_M6',
     'ggd_regio': 'statnaam'})
 
@@ -151,7 +154,7 @@ if radio_nav == 'Home':
 
     tooltip_text = f"Verschil met {ref_regio} (in {unit})"
     legend_title = f"Verschil met {ref_regio} (in {unit}), vóór correctie (linkse kaart) en ná correctie (rechtse kaart)."
-
+        
     # model 1 (voor correctie)
     m1 = (
         alt.Chart(ggd_regios)
@@ -161,6 +164,10 @@ if radio_nav == 'Home':
             alt.Color("verschil_M1:Q", scale=alt.Scale(scheme=COLORSCHEME, domain=full_domain_reversed), legend=alt.Legend(title=legend_title, orient='bottom')),
             alt.value('lightgray'),
             legend=None),
+            opacity=alt.condition(alt.datum.is_referentie_regio,
+            alt.value(0),
+            alt.value(1),
+            legend=None), # deze is nodig zodat deze chart bovenop gelayered kan worden waardoor tooltip zichtbaar blijft, maar toch referentieregio kan doorschijnen
             tooltip=[
                 alt.Tooltip("properties.statnaam:O", title="GGD regio"),
                 alt.Tooltip("verschil_M1:Q", title=tooltip_text),
@@ -168,7 +175,30 @@ if radio_nav == 'Home':
         )
         .transform_lookup(
             lookup="properties.statnaam",
-            from_=alt.LookupData(verschil_M1, "statnaam", ["verschil_M1"]),
+            from_=alt.LookupData(verschil_M1, "statnaam", ["verschil_M1", "is_referentie_regio"]),
+        )
+        .properties(
+            width=400,
+            height=440
+        )
+    )
+
+    alleen_refregio_kleur = (
+        alt.Chart(ggd_regios)
+        .mark_geoshape(stroke="white", strokeWidth=1)
+        .encode(
+            color=alt.condition(alt.datum.is_referentie_regio,
+            alt.value('black'),
+            alt.value('lightgray'),
+            legend=None),
+            opacity=alt.condition(alt.datum.is_referentie_regio,
+            alt.value(.7),
+            alt.value(0),
+            legend=None)
+        )
+        .transform_lookup(
+            lookup="properties.statnaam",
+            from_=alt.LookupData(verschil_M1, "statnaam", ["is_referentie_regio"]),
         )
         .properties(
             width=400,
@@ -186,6 +216,10 @@ if radio_nav == 'Home':
             alt.Color("verschil_M6:Q", scale=alt.Scale(scheme=COLORSCHEME, domain=full_domain_reversed), legend=alt.Legend(title=legend_title, orient='bottom')),
             alt.value('lightgray'),
             legend=None),
+            opacity=alt.condition(alt.datum.is_referentie_regio,
+            alt.value(0),
+            alt.value(1),
+            legend=None),
             tooltip=[
                 alt.Tooltip("properties.statnaam:O", title="GGD regio"),
                 alt.Tooltip("verschil_M6:Q", title=tooltip_text),
@@ -193,7 +227,7 @@ if radio_nav == 'Home':
         )
         .transform_lookup(
             lookup="properties.statnaam",
-            from_=alt.LookupData(verschil_M6, "statnaam", ["verschil_M6", "ref_regio"]),
+            from_=alt.LookupData(verschil_M6, "statnaam", ["verschil_M6", "ref_regio", "is_referentie_regio"]),
         )
         .properties(
             width=400,
@@ -202,7 +236,7 @@ if radio_nav == 'Home':
     )
 
     # kaarten naast elkaar
-    out2 = (m1 | m6).configure_legend(
+    out2 = (alleen_refregio_kleur + m1 | alleen_refregio_kleur + m6).configure_legend(
         gradientLength=800,
         gradientThickness=30,
         padding=10,
