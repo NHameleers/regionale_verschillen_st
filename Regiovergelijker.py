@@ -34,6 +34,11 @@ ggd_regios = alt.topo_feature(
 df = pd.read_csv('final_input_voor_tool.csv')
 df['uitkomstmaat'] = df['uitkomstmaat'].replace(UITKOMSTMAAT_MAP)
 
+# lange namen inkorten
+inkortdict = {'Veiligheids- en Gezondheidsregio Gelderland-Midden': 'Gelderland-Midden',
+'Dienst Gezondheid & Jeugd ZHZ': 'Zuid-Holland Zuid'}
+df.ggd_regio = df.ggd_regio.replace(inkortdict)
+
 ### NL GEMIDDELDEN VAN UITKOMSTMATEN
 nl_df = pd.read_csv('NL_gemiddelden.csv')
 
