@@ -38,6 +38,8 @@ df['uitkomstmaat'] = df['uitkomstmaat'].replace(UITKOMSTMAAT_MAP)
 inkortdict = {'Veiligheids- en Gezondheidsregio Gelderland-Midden': 'Gelderland-Midden',
 'Dienst Gezondheid & Jeugd ZHZ': 'Zuid-Holland Zuid'}
 df.ggd_regio = df.ggd_regio.replace(inkortdict)
+df.referentie_regio = df.referentie_regio.replace(inkortdict)
+
 
 ### NL GEMIDDELDEN VAN UITKOMSTMATEN
 nl_df = pd.read_csv('NL_gemiddelden.csv')
