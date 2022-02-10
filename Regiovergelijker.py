@@ -37,8 +37,8 @@ df['uitkomstmaat'] = df['uitkomstmaat'].replace(UITKOMSTMAAT_MAP)
 # lange namen inkorten
 inkortdict = {'Veiligheids- en Gezondheidsregio Gelderland-Midden': 'Gelderland-Midden',
 'Dienst Gezondheid & Jeugd ZHZ': 'Zuid-Holland Zuid'}
-df.ggd_regio = df.ggd_regio.replace(inkortdict)
-df.referentie_regio = df.referentie_regio.replace(inkortdict)
+df.ggd_regio = df.ggd_regio.replace(inkortdict).str.replace('GGD ', '')
+df.referentie_regio = df.referentie_regio.replace(inkortdict).str.replace('GGD ', '')
 
 
 ### NL GEMIDDELDEN VAN UITKOMSTMATEN
